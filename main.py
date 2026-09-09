@@ -3,6 +3,42 @@ import numpy as np
 
 vetor = []
 
+""" Horizontal, Vertical, 45º, 135º, Circular, Alta frequência, Circular Maior """
+vetKernels = [ [[-1, -1, -1], 
+                [ 2,  2,  2], 
+                [-1, -1, -1]],
+
+                [[-1, 2, -1], 
+                 [-1, 2, -1], 
+                 [-1, 2, -1]],
+
+                [[ 2, -1, -1],
+                 [-1,  2, -1],
+                 [-1, -1,  2]],
+
+                [[-1, -1,  2],
+                 [-1,  2, -1],
+                 [ 2, -1, -1]],
+
+                [[-1,  -1,  -1,  -1, -1],
+                 [-1,   1,   1,   1,  -1],
+                 [-1,   1,   4,   1,  -1],
+                 [-1,   1,   1,   1,  -1],
+                 [-1,  -1,  -1,  -1,  -1]],
+
+                [[ 0, -1,  0],
+                 [-1,  4, -1],
+                 [ 0, -1,  0]],
+
+                [[-1, -1, -1, -1, -1, -1, -1],
+                 [-1, -1,  0,  0,  0, -1, -1],
+                 [-1,  0,  1,  1,  1,  0, -1],
+                 [-1,  0,  1,  8,  1,  0, -1],
+                 [-1,  0,  1,  1,  1,  0, -1],
+                 [-1, -1,  0,  0,  0, -1, -1],
+                 [-1, -1, -1, -1, -1, -1, -1]]
+                               ]
+
 for i in range(1, 56):
     caminho = f"ImagensPreProcessadas/{i}.jpg"
     imagemEscala1 = cv2.imread(caminho)
@@ -21,75 +57,28 @@ for i in range(1, 56):
     cv2.waitKey(0) """
 
     """ ele passou 5 filtros para fazer, em 3 escalas, 3 * 5 = 15, o vetor precisa ter tamanho 24, não sei como vamos completar isso """
-    kernel_horizontal = np.array([[-1, -1, -1], 
-                                  [ 2,  2,  2], 
-                                  [-1, -1, -1]], dtype=np.float32) 
 
-    resposta = cv2.filter2D(imagemEscala1, cv2.CV_32F, kernel_horizontal)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
+    for kernel in vetKernels:
+        kernelRodada = np.array(kernel, dtype=np.float32)
 
-    resposta = cv2.filter2D(imagemEscala2, cv2.CV_32F, kernel_horizontal)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-    resposta = cv2.filter2D(imagemEscala3, cv2.CV_32F, kernel_horizontal)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-
-    """ Com ctz dava para fazer um for que seria mais facil do q isso, amanhã eu vejo """
-    kernel_vertical = np.array([[-1, 2, -1], 
-                                [-1, 2, -1], 
-                                [-1, 2, -1]], dtype=np.float32) 
-    resposta = cv2.filter2D(imagemEscala1, cv2.CV_32F, kernel_vertical)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-    resposta = cv2.filter2D(imagemEscala2, cv2.CV_32F, kernel_vertical)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-    resposta = cv2.filter2D(imagemEscala3, cv2.CV_32F, kernel_vertical)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
+        resposta = cv2.filter2D(imagemEscala1, cv2.CV_32F, kernelRodada)
+        caracteristica = np.mean(np.abs(resposta))
+        vetorRodada.append(caracteristica)
+    
+        resposta = cv2.filter2D(imagemEscala2, cv2.CV_32F, kernelRodada)
+        caracteristica = np.mean(np.abs(resposta))
+        vetorRodada.append(caracteristica)
+    
+        resposta = cv2.filter2D(imagemEscala3, cv2.CV_32F, kernelRodada)
+        caracteristica = np.mean(np.abs(resposta))
+        vetorRodada.append(caracteristica)
 
 
 
-    kernel_45 = np.array([[ 2, -1, -1],
-                          [-1,  2, -1],
-                          [-1, -1,  2]], dtype=np.float32)
-    resposta = cv2.filter2D(imagemEscala1, cv2.CV_32F, kernel_45)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-    resposta = cv2.filter2D(imagemEscala2, cv2.CV_32F, kernel_45)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-    resposta = cv2.filter2D(imagemEscala3, cv2.CV_32F, kernel_45)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-
-
-    kernel_135 = np.array([[-1, -1,  2],
-                           [-1,  2, -1],
-                           [ 2, -1, -1]], dtype=np.float32)
-    resposta = cv2.filter2D(imagemEscala1, cv2.CV_32F, kernel_135)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-    resposta = cv2.filter2D(imagemEscala2, cv2.CV_32F, kernel_135)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
-    resposta = cv2.filter2D(imagemEscala3, cv2.CV_32F, kernel_135)
-    caracteristica = np.mean(np.abs(resposta))
-    vetorRodada.append(caracteristica)
-
+    
+    """ é bom normalizar o vetor """
     print(vetorRodada)
     print(len(vetorRodada))
     vetor.append(vetorRodada)
 
-print(vetor)
+""" print(vetor) """
