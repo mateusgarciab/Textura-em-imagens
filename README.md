@@ -1,6 +1,6 @@
 Autores:
     Mateus Garicia Baiak    GRR20224378
-    --------------- ADICIONE SEU NOME --------------------------
+    Gabriel Shigueo Ushiwa Kaguimoto Rodrigues GRR20221261
 
 Arquivos/Diretórios:
     ImagensOriginais:
